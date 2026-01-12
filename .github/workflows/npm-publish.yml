@@ -1,0 +1,110 @@
+# This workflow will run tes0<!DOCTYPE html>
+<html>
+<head>
+<title>Ashrafi Quran Academy</title>
+<style>
+body {
+  margin:0;
+  font-family: Arial, sans-serif;
+  background: #fff0f6;
+  text-align:center;
+}
+header {
+  background:#ff69b4;
+  padding:20px;
+  color:white;
+  font-size:26px;
+  font-weight:bold;
+}
+section {
+  padding:20px;
+}
+.card {
+  background:white;
+  margin:15px auto;
+  padding:20px;
+  max-width:500px;
+  border-radius:10px;
+  box-shadow:0 0 10px #ffc0cb;
+}
+button {
+  background:#ff69b4;
+  color:white;
+  border:none;
+  padding:10px 20px;
+  border-radius:8px;
+  font-size:16px;
+}
+footer {
+  background:#ff69b4;
+  color:white;
+  padding:10px;
+  margin-top:20px;
+}
+</style>
+</head>
+<body>
+
+<header>
+🌸 Ashrafi Quran Academy 🌸
+</header>
+
+<section>
+<div class="card">
+<h2>Learn Quran Online</h2>
+<p>We teach Quran with Tajweed for kids & sisters.</p>
+<p>Online classes available.</p>
+</div>
+
+<div class="card">
+<h2>قرآن آن لائن سیکھیں</h2>
+<p>بچوں اور بہنوں کے لیے قرآن تجوید کے ساتھ پڑھایا جاتا ہے۔</p>
+</div>
+
+<div class="card">
+<h2>Contact on Telegram</h2>
+<p>Join & Message us on Telegram</p>
+<a href="https://t.me/YOUR_TELEGRAM_USERNAME">
+<button>Open Telegram</button>
+</a>
+</div>
+</section>
+
+<footer>
+© 2026 Ashrafi Quran Academy
+</footer>
+
+</body>
+</html>ts using node and then publish a package to GitHub Packages when a release is created
+# For more information see: https://docs.github.com/en/actions/publishing-packages/publishing-nodejs-packages
+
+name: Node.js Package
+
+on:
+  release:
+    types: [created]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+      - run: npm ci
+      - run: npm test
+
+  publish-npm:
+    needs: build
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          registry-url: https://registry.npmjs.org/
+      - run: npm ci
+      - run: npm publish
+        env:
+          NODE_AUTH_TOKEN: ${{secrets.npm_token}}
